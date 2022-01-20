@@ -1,0 +1,3 @@
+cant use a variable before to be initializated
+in real live developers dont multiply the number they use variables store the numbers in that variables and the multiply sum rest divide with them
+if want reassing variable you can doit just using the variable and then put a new value
