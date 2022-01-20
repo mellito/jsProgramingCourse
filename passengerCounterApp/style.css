@@ -15,6 +15,7 @@ body{
 div{
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 h1{
@@ -40,7 +41,13 @@ button
     width: 200px;
     margin-bottom: 5px;
     border-radius: 5px;
+    
 }
+
+p{
+    color:rgb(210, 255, 8);
+    
+} 
 
 #increment-btn{
     background-color: darkred;
