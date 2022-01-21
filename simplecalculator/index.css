@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    font-weight: bold;
+}
+
+.container {
+    background-color: red;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+button {
+    width: 20%;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+input {
+    width: 10%;
+    border: none;
+    outline: none;
+    text-align: center;
+    background-color: inherit;
+    border-bottom: 1px solid black;
+    color: blue;
+}
