@@ -8,6 +8,7 @@ let starButton = document.getElementById("startButton");
 let standButton = document.getElementById("stand");
 let hitButton = document.getElementById("hit");
 let newGameButton = document.getElementById("newgame");
+let winnerEl = document.getElementById("winner-el");
 
 let humanArray = inicializateArray();
 let pcArray = inicializateArray();
@@ -37,31 +38,10 @@ function sumArray(array) {
   return result;
 }
 
-function startGame() {
-  renderGAme();
-  displayButtons("none", "inline", "inline", "none");
-}
-
-function validator(sum) {
-  let message;
-  if (sum < 21) {
-    message = "do you want to draw a new card?";
-  } else if (sum === 21) {
-    message = "you have got blackjack!";
-  } else {
-    message = "You! are out of the game";
-    displayButtons("none", "none", "none", "inline");
-  }
-  return message;
-}
 function renderGAme() {
   let sumHuman = sumArray(humanArray);
-  let sumpc = sumArray(pcArray);
-
-  let humanMessage = validator(sumHuman);
 
   sumHumanEl.textContent = `You card sum is : ${sumHuman}`;
-  messageHumanEl.textContent = humanMessage;
 
   humanArray.map((index) => {
     humanCardContainer.innerHTML +=
@@ -69,13 +49,19 @@ function renderGAme() {
   });
 
   pcArray.map((index) => {
-    if (pcArray[0] == index) {
+    if (pcArray[1] == index) {
       pcCardContainer.innerHTML += "<span>" + "<p>" + "c1" + "</p>" + "</span>";
     } else {
       pcCardContainer.innerHTML +=
         "<span>" + "<p>" + index + "</p>" + "</span>";
     }
   });
+}
+
+function startGame() {
+  messageHumanEl.textContent = "";
+  renderGAme();
+  displayButtons("none", "inline", "inline", "none");
 }
 
 function newCard() {
@@ -87,18 +73,52 @@ function newCard() {
     "<span>" + "<p>" + humanArray[humanArray.length - 1] + "</p>" + "</span>";
 
   sumHumanEl.textContent = `You card sum are : ${sumHuman}`;
-  let message = validator(sumHuman);
-  messageHumanEl.textContent = message;
+
+  if (sumHuman == 21) {
+    winnerEl.textContent = `You win`;
+    displayButtons("none", "none", "none", "inline");
+  } else if (sumHuman > 21) {
+    winnerEl.textContent = `Pc win`;
+    displayButtons("none", "none", "none", "inline");
+  }
 }
 
-function showPcCards() {
+function newCardPc() {
+  let sumHuman = sumArray(humanArray);
+  let sumpc = sumArray(pcArray);
+
   pcCardContainer.innerHTML = "";
   pcArray.map((index) => {
     pcCardContainer.innerHTML += "<span>" + "<p>" + index + "</p>" + "</span>";
   });
+
+  while (sumpc < 21 && sumHuman > sumpc) {
+    let pluscard = getRndInteger(2, 11);
+    pcArray.push(pluscard);
+    sumpc = sumArray(pcArray);
+    pcCardContainer.innerHTML +=
+      "<span>" + "<p>" + pcArray[humanArray.length - 1] + "</p>" + "</span>";
+  }
+
+  pcHumanEl.textContent = `Pc card sum is : ${sumpc}`;
 }
+
 function stanGame() {
-  showPcCards();
+  newCardPc();
+  let sumHuman = sumArray(humanArray);
+  let sumpc = sumArray(pcArray);
+
+  console.log(sumHuman);
+  console.log(sumpc);
+  if (sumHuman > sumpc) {
+    winnerEl.textContent = `You win`;
+  } else if (sumpc > 21) {
+    winnerEl.textContent = `You win`;
+  } else {
+    winnerEl.textContent = `Pc win`;
+  }
+
+  displayButtons("none", "none", "none", "inline");
 }
 
 function newGame() {
@@ -107,6 +127,8 @@ function newGame() {
   pcCardContainer.innerHTML = "";
   humanCardContainer.innerHTML = "";
   sumHumanEl.textContent = "";
+  pcHumanEl.textContent = "";
+  winnerEl.textContent = "";
   renderGAme();
   displayButtons("none", "inline", "inline", "none");
 }
