@@ -12,41 +12,13 @@
     <main>
       <section class="main-top">
         <h1>Blackjack</h1>
-        <p id="messagehuman-el">Want to play a round?</p>
+        <p id="message-el">Want to play a round?</p>
+        <p id="card-el">Card:</p>
+        <p id="sum-el">Sum:</p>
+        <button class="button" onclick="startGame()">START</button>
+        <button class="button" onclick="newCard()">NEW CARD</button>
+        <p id="player-el"></p>
       </section>
-
-      <section class="main-mid">
-        <section class="human-container">
-          <p>You Cards</p>
-          <article class="card-container humancard"></article>
-          <p id="sumhuman-el"></p>
-        </section>
-
-        <section class="pc-container">
-          <p>Pc cards</p>
-          <article class="card-container pccard"></article>
-          <p id="sumpc-el"></p>
-        </section>
-      </section>
-
-      <section class="main-botton">
-        <button class="buttonBlackjack" id="startButton" onclick="startGame()">
-          START GAME
-        </button>
-
-        <button class="buttonBlackjack" id="hit" onclick="newCard()">
-          HIT
-        </button>
-
-        <button class="buttonBlackjack" id="stand" onclick="stanGame()">
-          STAND
-        </button>
-        <button class="buttonBlackjack" id="newgame" onclick="newGame()">
-          NEWGAME
-        </button>
-      </section>
-
-      <p id="winner-el"></p>
     </main>
 
     <script src="./index.js"></script>

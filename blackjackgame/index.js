@@ -1,134 +1,70 @@
-let messageHumanEl = document.getElementById("messagehuman-el");
-let messagePcEl = document.getElementById("messagepc-el");
-let sumHumanEl = document.getElementById("sumhuman-el");
-let pcHumanEl = document.getElementById("sumpc-el");
-let humanCardContainer = document.querySelector(".humancard");
-let pcCardContainer = document.querySelector(".pccard");
-let starButton = document.getElementById("startButton");
-let standButton = document.getElementById("stand");
-let hitButton = document.getElementById("hit");
-let newGameButton = document.getElementById("newgame");
-let winnerEl = document.getElementById("winner-el");
+let cards = [];
+let sum = 0;
+let hasBlackjack = false;
+let isAlive = true;
+let message = "";
+let playerData = [
+  {
+    name: "mellito",
+    chips: 145,
+  },
+];
 
-let humanArray = inicializateArray();
-let pcArray = inicializateArray();
+let messageEl = document.getElementById("message-el");
+let sumEl = document.getElementById("sum-el");
+let cardEl = document.getElementById("card-el");
+let playerEl = document.getElementById("player-el");
 
-function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+playerEl.textContent = playerData[0].name + " : $" + playerData[0].chips;
 
-function displayButtons(startoption, standoption, hitoption, newgameoption) {
-  starButton.style.display = startoption;
-  standButton.style.display = standoption;
-  hitButton.style.display = hitoption;
-  newGameButton.style.display = newgameoption;
-}
-function inicializateArray() {
-  let firstCard = getRndInteger(2, 11);
-  let secondCard = getRndInteger(2, 11);
-  let array = [firstCard, secondCard];
-  return array;
-}
+function getRandomCard() {
+  let result = Math.floor(Math.random() * 13) + 1;
 
-function sumArray(array) {
-  let result = 0;
-  array.map((index) => {
-    result += index;
-  });
-  return result;
-}
-
-function renderGAme() {
-  let sumHuman = sumArray(humanArray);
-
-  sumHumanEl.textContent = `You card sum is : ${sumHuman}`;
-
-  humanArray.map((index) => {
-    humanCardContainer.innerHTML +=
-      "<span>" + "<p>" + index + "</p>" + "</span>";
-  });
-
-  pcArray.map((index) => {
-    if (pcArray[1] == index) {
-      pcCardContainer.innerHTML += "<span>" + "<p>" + "c1" + "</p>" + "</span>";
-    } else {
-      pcCardContainer.innerHTML +=
-        "<span>" + "<p>" + index + "</p>" + "</span>";
-    }
-  });
-}
-
-function startGame() {
-  messageHumanEl.textContent = "";
-  renderGAme();
-  displayButtons("none", "inline", "inline", "none");
-}
-
-function newCard() {
-  let pluscard = getRndInteger(2, 11);
-  humanArray.push(pluscard);
-  let sumHuman = sumArray(humanArray);
-
-  humanCardContainer.innerHTML +=
-    "<span>" + "<p>" + humanArray[humanArray.length - 1] + "</p>" + "</span>";
-
-  sumHumanEl.textContent = `You card sum are : ${sumHuman}`;
-
-  if (sumHuman == 21) {
-    winnerEl.textContent = `You win`;
-    displayButtons("none", "none", "none", "inline");
-  } else if (sumHuman > 21) {
-    winnerEl.textContent = `Pc win`;
-    displayButtons("none", "none", "none", "inline");
-  }
-}
-
-function newCardPc() {
-  let sumHuman = sumArray(humanArray);
-  let sumpc = sumArray(pcArray);
-
-  pcCardContainer.innerHTML = "";
-  pcArray.map((index) => {
-    pcCardContainer.innerHTML += "<span>" + "<p>" + index + "</p>" + "</span>";
-  });
-
-  while (sumpc < 21 && sumHuman > sumpc) {
-    let pluscard = getRndInteger(2, 11);
-    pcArray.push(pluscard);
-    sumpc = sumArray(pcArray);
-    pcCardContainer.innerHTML +=
-      "<span>" + "<p>" + pcArray[humanArray.length - 1] + "</p>" + "</span>";
-  }
-
-  pcHumanEl.textContent = `Pc card sum is : ${sumpc}`;
-}
-
-function stanGame() {
-  newCardPc();
-  let sumHuman = sumArray(humanArray);
-  let sumpc = sumArray(pcArray);
-
-  console.log(sumHuman);
-  console.log(sumpc);
-  if (sumHuman > sumpc) {
-    winnerEl.textContent = `You win`;
-  } else if (sumpc > 21) {
-    winnerEl.textContent = `You win`;
+  if (result == 1) {
+    return 11;
+  } else if (result >= 11) {
+    return 10;
   } else {
-    winnerEl.textContent = `Pc win`;
+    return result;
+  }
+}
+
+const startGame = () => {
+  let firstCard = getRandomCard();
+  let seconCard = getRandomCard();
+  cards = [firstCard, seconCard];
+  sum = firstCard + seconCard;
+  hasBlackjack = false;
+  isAlive = true;
+  renderGame();
+};
+
+const renderGame = () => {
+  cardEl.textContent = "cards: ";
+
+  for (let index = 0; index < cards.length; index++) {
+    cardEl.textContent += cards[index] + " ";
   }
 
-  displayButtons("none", "none", "none", "inline");
-}
+  sumEl.textContent = "Sum: " + sum;
+  if (sum <= 20) {
+    message = "Do you want ti draw a new card";
+  } else if (sum === 21) {
+    message = "you have got Blackjack";
+    hasBlackjack = true;
+  } else {
+    message = "you are out of the game !";
+    isAlive = false;
+  }
 
-function newGame() {
-  humanArray = inicializateArray();
-  pcArray = inicializateArray();
-  pcCardContainer.innerHTML = "";
-  humanCardContainer.innerHTML = "";
-  sumHumanEl.textContent = "";
-  pcHumanEl.textContent = "";
-  winnerEl.textContent = "";
-  renderGAme();
-  displayButtons("none", "inline", "inline", "none");
-}
+  messageEl.textContent = message;
+};
+//only allow the player to get a new card if she isAlive and does not have blackjack
+const newCard = () => {
+  if (isAlive === true && hasBlackjack === false) {
+    let card = getRandomCard();
+    sum += card;
+    cards.push(card);
+    renderGame();
+  }
+};
